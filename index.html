@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Union Battle Field</title>
+
+  <!-- Fonts (strictly brand kit) -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/supermolot" rel="stylesheet">
+
+  <link rel="icon" href="union-logo.svg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Header (fixed) -->
+  <header id="app-header" class="header">
+    <div class="header-inner">
+      <img src="union-logo.svg" alt="Union" class="logo" />
+      <div class="title">Union Battle Field</div>
+    </div>
+  </header>
+
+  <!-- Footer (fixed) -->
+  <footer id="app-footer" class="footer">
+    <div class="footer-inner">
+      Win with honor. Lose with grace. Fight like a Union Maxi.
+    </div>
+  </footer>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Main App -->
+  <main id="app" class="app">
+
+    <!-- ============ Landing ============ -->
+    <section id="landing" class="view view-landing" aria-label="Landing">
+      <div class="card landing-card">
+        <h1 class="h1">The Fight has Begun</h1>
+        <p class="lead">
+          Step into the arena where your contributions collide.
+          This battle reveals who truly carries the Union banner. Fight fair. Flex harder.
+        </p>
+        <button id="start-battle" class="btn btn-primary wide">Start The Battle</button>
+      </div>
+    </section>
+
+    <!-- ============ Gear Select (Inputs) ============ -->
+    <section id="gear" class="view view-gear" aria-label="Choose Your Gears" hidden>
+      <div class="card gear-card">
+        <h2 class="h2">Choose Your Gears</h2>
+        <div class="gear-forms">
+          <!-- Your username -->
+          <div class="gear-box">
+            <div class="gear-label">Your X Username</div>
+            <div class="input-wrap">
+              <span class="at">@</span>
+              <input id="player-username" type="text" placeholder="yourxusername" autocomplete="off" />
+            </div>
+          </div>
+          <!-- Opponent username -->
+          <div class="gear-box">
+            <div class="gear-label">Choose Your Opponent</div>
+            <div class="input-wrap">
+              <span class="at">@</span>
+              <input id="opponent-username" type="text" placeholder="opponentsxusername" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+        <button id="begin-battle" class="btn btn-pulse">Let the Battle Begin</button>
+      </div>
+    </section>
+
+    <!-- ============ Arena (Battle) ============ -->
+    <section id="arena" class="view view-arena" aria-label="Battle Arena" hidden>
+      <!-- Dim overlay & center FX (⚔️ etc) -->
+      <div id="arena-overlay" class="arena-overlay" aria-hidden="true"></div>
+      <div id="arena-center-fx" class="arena-center-fx" aria-hidden="true">⚔️</div>
+
+      <div class="arena-grid">
+        <!-- Opponent Side (Top on mobile / Left on desktop) -->
+        <section id="opponent-side" class="side side-opponent">
+          <div class="side-header">
+            <img id="opponent-pfp" class="pfp" alt="Opponent PFP" />
+            <div class="meta">
+              <div id="opponent-handle" class="handle">@opponent</div>
+              <div id="opponent-tags" class="tags"></div>
+            </div>
+          </div>
+
+          <!-- Bars -->
+          <div class="bars">
+            <div class="bar-block" data-metric="tester">
+              <div class="bar-title">Tester Trait</div>
+              <div class="bar-rail">
+                <div id="op-bar-tester" class="bar-fill"></div>
+              </div>
+              <div class="bar-stats">
+                <span id="op-tester-allocation" class="bar-value">0 $U</span>
+                <span id="op-tester-percentile" class="bar-sub">Top —%</span>
+              </div>
+            </div>
+
+            <div class="bar-block" data-metric="s0">
+              <div class="bar-title">OG Armour</div>
+              <div class="bar-rail">
+                <div id="op-bar-s0" class="bar-fill"></div>
+              </div>
+              <div class="bar-stats">
+                <span id="op-s0-ms" class="bar-value">0%</span>
+                <span id="op-s0-percentile" class="bar-sub">Top —%</span>
+              </div>
+            </div>
+
+            <div class="bar-block" data-metric="s1">
+              <div class="bar-title">Hyper Health</div>
+              <div class="bar-rail">
+                <div id="op-bar-s1" class="bar-fill"></div>
+              </div>
+              <div class="bar-stats">
+                <span id="op-s1-ms" class="bar-value">0%</span>
+                <span id="op-s1-percentile" class="bar-sub">Top —%</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Player Side (Bottom on mobile / Right on desktop) -->
+        <section id="player-side" class="side side-player">
+          <div class="side-header">
+            <img id="player-pfp" class="pfp" alt="Player PFP" />
+            <div class="meta">
+              <div id="player-handle" class="handle">@you</div>
+              <div id="player-tags" class="tags"></div>
+            </div>
+          </div>
+
+          <!-- Bars -->
+          <div class="bars">
+            <div class="bar-block" data-metric="tester">
+              <div class="bar-title">Tester Trait</div>
+              <div class="bar-rail">
+                <div id="pl-bar-tester" class="bar-fill"></div>
+              </div>
+              <div class="bar-stats">
+                <span id="pl-tester-allocation" class="bar-value">0 $U</span>
+                <span id="pl-tester-percentile" class="bar-sub">Top —%</span>
+              </div>
+            </div>
+
+            <div class="bar-block" data-metric="s0">
+              <div class="bar-title">OG Armour</div>
+              <div class="bar-rail">
+                <div id="pl-bar-s0" class="bar-fill"></div>
+              </div>
+              <div class="bar-stats">
+                <span id="pl-s0-ms" class="bar-value">0%</span>
+                <span id="pl-s0-percentile" class="bar-sub">Top —%</span>
+              </div>
+            </div>
+
+            <div class="bar-block" data-metric="s1">
+              <div class="bar-title">Hyper Health</div>
+              <div class="bar-rail">
+                <div id="pl-bar-s1" class="bar-fill"></div>
+              </div>
+              <div class="bar-stats">
+                <span id="pl-s1-ms" class="bar-value">0%</span>
+                <span id="pl-s1-percentile" class="bar-sub">Top —%</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Floating random buttons container (zkgm, etc) -->
+      <div id="battle-actions" class="battle-actions" aria-hidden="true"></div>
+
+      <!-- Finish Battle Button (revealed after settle) -->
+      <button id="finish-battle" class="btn btn-finish" hidden>Finish Battle</button>
+    </section>
+
+  </main>
+
+  <!-- ============ Modals ============ -->
+
+  <!-- Victory Modal -->
+  <dialog id="victory-modal" class="modal">
+    <div class="modal-card">
+      <h3 class="h2">Congratulations!</h3>
+      <p class="modal-desc">
+        You claimed victory in the Union Battle Field. Share the win, then challenge another Maxi.
+      </p>
+      <div class="modal-actions">
+        <button id="share-victory" class="btn btn-primary">Share your Victory</button>
+        <button id="fight-again" class="btn btn-ghost">Fight Again</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Devs Are Unbeatable Modal -->
+  <dialog id="devs-modal" class="modal">
+    <div class="modal-card">
+      <h3 class="h2">Can't Win Devs</h3>
+      <p class="modal-desc">
+        You challenged one of the creators of the arena. Respect where it’s due — some battles are unwinnable.
+        Try a different opponent and forge your legend.
+      </p>
+      <div class="modal-actions">
+        <button id="share-devs" class="btn btn-primary">Share</button>
+        <button id="devs-try-again" class="btn btn-ghost">Try Again</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Error Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+              </html>
