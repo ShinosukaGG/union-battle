@@ -23,7 +23,7 @@ const S1_TOTAL = 1_000;
 const YAPPER_S0_POOL = 45_000_000;
 const YAPPER_S1_POOL = 30_000_000;
 
-const SHARE_HASHTAG = '#battle';
+const SHARE_HASHTAG = 'https://x.com/Shinosuka_eth/status/1954921059733602581';
 
 const DEV_DEITIES = new Set(['0xkaiserkarel','e_beriker','corcoder']);
 
